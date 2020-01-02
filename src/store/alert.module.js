@@ -5,26 +5,26 @@ const state = {
 
 const actions = {
     success({ commit }, message) {
-        commit('success', message);
+        commit('MU_SUCCESS_MSG', message);
     },
     error({ commit }, message) {
-        commit('error', message);
+        commit('MU_ERROR_MSG', message);
     },
     clear({ commit }, message) {
-        commit('success', message);
+        commit('MU_SUCCESS_MSG', message);
     }
 };
 
 const mutations = {
-    success(state, message) {
+    MU_SUCCESS_MSG(state, message) {
         state.type = 'alert-success';
         state.message = message;
     },
-    error(state, message) {
+    MU_ERROR_MSG(state, message) {
         state.type = 'alert-danger';
         state.message = message;
     },
-    clear(state) {
+    MU_CLEAR_MSG(state) {
         state.type = null;
         state.message = null;
     }

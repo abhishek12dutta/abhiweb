@@ -7,39 +7,39 @@ const state = user
     : { status: {}, user: null };
 
 const actions = {
-    login({ dispatch, commit }, payload) {
+    async login({ dispatch, commit }, payload) {
 
         //const payload = {'USER_NAME': this.username, 'PASSWORD': this.password};
         const username = payload.USER_NAME;
         const password = payload.PASSWORD;
 
-        commit('loginRequest', { username });
+        commit('MU_LOGIN_REQUEST', { username });
     
         userService.login(username, password)
             .then(
                 user => {
-                    commit('loginSuccess', user);
+                    commit('MU_LOGIN_SUCCESS', user);
                     router.push('/');
                 },
                 error => {
-                    commit('loginFailure', error);
+                    commit('MU_FAILED_LOGIN', error);
                     dispatch('alert/error', error, { root: true });
                 }
             );
     },
-    logout({ commit }) {
+    async logout({ commit }) {
         userService.logout();
-        commit('logout');
+        commit('MU_LOGOUT');
     },
-    register({ dispatch, commit }, registerUser) {
+    async register({ dispatch, commit }, registerUser) {
         console.log(registerUser);
-        commit('registerRequest');
+        commit('MU_REGISTER_USER');
         
             userService.register(registerUser)
                 .then(
                     registerUser => {
                         console.log(registerUser);
-                        commit('registerSuccess');
+                        commit('MU_REGISTER_SUCCESS');
                         router.push('/login');
                         setTimeout(() => {
                             // display success message after route change completes
@@ -47,7 +47,7 @@ const actions = {
                         })
                     },
                     error => {
-                        commit('registerFailure', error);
+                        commit('MU_REGISTER_FALIURE', error);
                         dispatch('alert/error', error, { root: true });
                     }
                 );
@@ -55,30 +55,30 @@ const actions = {
     };
 
     const mutations = {
-        loginRequest(state, user) {
+        MU_LOGIN_REQUEST(state, user) {
             state.status = { loggingIn: true };
             state.user = user;
         },
-        loginSuccess(state, user) {
+        MU_LOGIN_SUCCESS(state, user) {
             state.status = { loggedIn: true };
             state.user = user;
         },
-        loginFailure(state) {
+        MU_FAILED_LOGIN(state) {
             state.status = {};
             state.user = null;
         },
-        logout(state) {
+        MU_LOGOUT(state) {
             state.status = {};
             state.user = null;
         },
-        registerRequest(state) {
+        MU_REGISTER_USER(state) {
             state.status = { registering: true };
         },
-        registerSuccess(state) {
+        MU_REGISTER_SUCCESS(state) {
             state.status = {};
         },
-        registerFailure(state, error) {
-            alert(error);
+        MU_REGISTER_FALIURE(state, error) {
+            console.log(error);
             state.status = {};
         }
     };

@@ -5,12 +5,15 @@ import { account } from './account.module';
 
 import { alert } from './alert.module';
 
+import {todo} from './todo.module';
+
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
         account,
-        alert
+        alert,
+        todo
     }
 });

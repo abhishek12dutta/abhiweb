@@ -70,6 +70,19 @@ export function configureFakeBackend() {
                     return;
                 }
 
+                // checkusername
+                if (url.match(/\/mediaResource\?someParam=(.*)$/) && opts.method === 'GET') {
+                    const result = url.match(/\/mediaResource\?someParam=(.*)$/)
+                    const username= result[1]
+
+                    let duplicateUser = users.filter(user => { return user.username === username; }).length;
+                    
+
+                    // respond 200 OK
+                    resolve({ ok: true, text: () => duplicateUser });
+
+                }
+
                 // register user
                 if (url.endsWith('/users/register') && opts.method === 'POST') {
                     // get new user object from post body
