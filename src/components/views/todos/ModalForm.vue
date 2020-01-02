@@ -52,6 +52,16 @@
                   class="form-control"
                 />
               </div>
+              <div class="form-group">
+                <label for="priority">Priority</label>
+                <input
+                  type="text"
+                  v-model="todo.priority"
+                  name="priority"
+                  class="form-control"
+                />
+              </div>
+
             </div>
 
             <div class="modal-footer">
@@ -78,10 +88,13 @@ export default {
   data() {
     return {
       todo: {
+        id:1,
         title: "",
+        priority:"",
         desc: "",
         completed: false,
-        date: ""
+        date: "",
+        tags:[]
       },
       useraction:''
     };

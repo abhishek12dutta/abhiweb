@@ -28,3 +28,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 https://stackblitz.com/edit/vue-vuex-registration-login-example
 
 ```
+
+### clone repo
+```
+
+step 1: git init
+step 2: git clone github.com:abhishek12dutta/abhiweb.git

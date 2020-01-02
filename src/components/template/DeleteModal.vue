@@ -17,17 +17,13 @@
             &times;
           </button>
         </div>
-        <div class="modal-body">
-          <p>
-            Do you really want to delete these records? This process cannot be
-            undone.
-          </p>
-        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-sm btn-info" data-dismiss="modal">
             Cancel
           </button>
-          <button type="button" id="delete_me" class="btn btn-sm btn-danger">Delete</button>
+          <button type="button" id="delete_me" class="btn btn-sm btn-danger" v-if="action=='DELETE_TODO'">Delete</button>
+          <button type="button" id="delete_me" class="btn btn-sm btn-danger" v-else-if="action=='TODO_DONE'">Complete</button>
+          <button type="button" id="delete_me" class="btn btn-sm btn-danger" v-else-if="action=='TODO_UNDONE'">Open</button>
         </div>
       </div>
     </div>
@@ -37,9 +33,15 @@
 //import { mapActions } from "vuex";
 export default {
   data() {
-    return {};
+    return {
+      action:'DELETE_TODO'
+    };
   },
-  methods: {},
+  methods: {
+    setTODOAction: function(action) {
+        this.action = action;
+    }
+  },
   computed: {}
 };
 </script>
@@ -54,6 +56,8 @@ export default {
   border: none;
   text-align: center;
   font-size: 14px;
+  width: 70%;
+  margin: auto;
 }
 .modal-confirm .modal-header {
   border-bottom: none;
@@ -104,9 +108,7 @@ export default {
   text-decoration: none;
   transition: all 0.4s;
   line-height: normal;
-  min-width: 120px;
   border: none;
-  min-height: 40px;
   border-radius: 3px;
   margin: 0 5px;
   outline: none !important;
