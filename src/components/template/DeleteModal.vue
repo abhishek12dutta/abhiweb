@@ -1,7 +1,7 @@
 <template>
   <!-- Modal HTML -->
   <div id="myModal" class="modal fade">
-    <div class="modal-dialog modal-confirm">
+    <div class="modal-dialog modal-confirm" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <div class="icon-box">
@@ -24,10 +24,10 @@
           </p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-info" data-dismiss="modal">
+          <button type="button" class="btn btn-sm btn-info" data-dismiss="modal">
             Cancel
           </button>
-          <button type="button" id="delete_me" class="btn btn-danger">Delete</button>
+          <button type="button" id="delete_me" class="btn btn-sm btn-danger">Delete</button>
         </div>
       </div>
     </div>
@@ -47,7 +47,6 @@ export default {
 <style scoped>
 .modal-confirm {
   color: #636363;
-  width: 400px;
 }
 .modal-confirm .modal-content {
   padding: 20px;
@@ -63,7 +62,7 @@ export default {
 .modal-confirm h4 {
   text-align: center;
   font-size: 26px;
-  margin: 30px 0 -10px;
+  margin: 18px 0 -10px;
 }
 .modal-confirm .close {
   position: absolute;

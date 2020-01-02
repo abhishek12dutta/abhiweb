@@ -62,7 +62,7 @@
               >
                 Close
               </button>
-              <button type="Submit" class="btn btn-success">
+              <button type="Submit" id="submitNewTodo" class="btn btn-success">
                 Save changes
               </button>
             </div>

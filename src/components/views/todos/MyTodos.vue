@@ -92,7 +92,21 @@ export default {
     openNewTodoModal() {
       let $ = JQuery;
       let element = this.$refs.addNewTodoModal.$el;
-      $(element).modal("show");
+        let todo = {
+        title: "",
+        desc: "",
+        completed: false,
+        date: ""
+      };
+      this.$refs.addNewTodoModal.setUseraction("CREATE", todo);
+      $(element)
+        .modal({
+          backdrop: "static",
+          keyboard: false
+        })
+        .on("click", "#submitNewTodo", () => {
+          $(element).modal("toggle");
+        });
     },
 
     deleteTodo: function(id) {
@@ -116,7 +130,6 @@ export default {
       const todos = this.$store.state.todo.todos;
       let index = todos.findIndex(todo => todo.id === id);
       if (index >= 0) {
-        console.log("deleteing todo is: " + todos[index].id);
         this.$refs.addNewTodoModal.setUseraction("EDIT", todos[index]);
         let $ = JQuery;
         let element = this.$refs.addNewTodoModal.$el;
