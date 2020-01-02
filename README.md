@@ -34,3 +34,11 @@ https://stackblitz.com/edit/vue-vuex-registration-login-example
 
 step 1: git init
 step 2: git clone github.com:abhishek12dutta/abhiweb.git
+
+Steps to push to remote:
+------------------------
+git add .
+
+git commit -m "modified"
+
+git push origin master
