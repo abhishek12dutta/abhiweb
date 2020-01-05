@@ -53,7 +53,7 @@
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Profile
+            Welcome {{user.username}}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <router-link class="nav-link" to="/changepassword/">Change password</router-link>
@@ -100,5 +100,7 @@ export default {
 .navbar-light .navbar-nav .nav-link {
     color: white;
 }
-
+.dropdown-menu{
+  background-color: rgb(2, 162, 210);
+}
 </style>

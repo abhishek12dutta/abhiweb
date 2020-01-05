@@ -45,23 +45,40 @@
 
               <div class="form-group">
                 <label for="date">Date</label>
-                <input
-                  type="text"
+                <datepicker
+                  format="MM/dd/yyyy"
+                  placeholder="Select Date"
                   v-model="todo.date"
-                  name="date"
-                  class="form-control"
-                />
-              </div>
-              <div class="form-group">
-                <label for="priority">Priority</label>
-                <input
-                  type="text"
-                  v-model="todo.priority"
-                  name="priority"
-                  class="form-control"
-                />
+                ></datepicker>
               </div>
 
+              <div class="form-group">
+                <label for="priority">Priority</label>
+                <select
+                  v-model="todo.priority"
+                  class="form-control"
+                  name="priority"
+                >
+                  <option disabled value="">Please select one</option>
+                  <option>High</option>
+                  <option>Medium</option>
+                  <option>Low</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="tags">Tags</label>
+                <select
+                  v-model="todo.tags"
+                  multiple
+                  class="form-control"
+                  name="tags"
+                >
+                  <option>Personal</option>
+                  <option>Office Work</option>
+                  <option>Others</option>
+                </select>
+              </div>
             </div>
 
             <div class="modal-footer">
@@ -73,7 +90,7 @@
                 Close
               </button>
               <button type="Submit" id="submitNewTodo" class="btn btn-success">
-                Save changes
+                {{ useraction == "EDIT" ? "Save changes" : "Create" }}
               </button>
             </div>
           </form>
@@ -84,31 +101,52 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import Datepicker from "vuejs-datepicker";
 export default {
+  components: {
+    Datepicker
+  },
   data() {
     return {
       todo: {
-        id:1,
+        id: 1,
         title: "",
-        priority:"",
+        priority: "",
         desc: "",
         completed: false,
         date: "",
-        tags:[]
+        tags: []
       },
-      useraction:''
+      useraction: "",
     };
   },
   methods: {
-    ...mapActions("todo", ["action_add_todo"]),
+    ...mapActions("todo", ["action_add_todo", "action_edit_todo"]),
     submitNewTodo() {
+      this.todo.date=this.todo.date.toISOString().substring(0, 10);
       console.log("Hi" + JSON.stringify(this.todo));
-      this.action_add_todo(this.todo);
+      if (this.useraction == "EDIT") {
+        this.action_edit_todo(this.todo);
+      } else {
+        this.todo.id = Math.random()
+          .toString(36)
+          .substr(2, 9);
+        this.action_add_todo(this.todo);
+      }
     },
-    setUseraction: function(action,todo) {
-        this.useraction = action;
-        this.todo=todo;
-    }
+    setUseraction: function(action, todo) {
+      this.useraction = action;
+      this.todo = todo;
+    },
+    // CallDateFunction(date) {
+    //   if (date) {
+    //     const dateString = date.toISOString().substring(0, 10);
+    //     this.todo.date==dateString;
+    //     console.log(this.todo.date);
+    //   } else {
+    //     console.log("null date");
+    //   }
+    // }
   },
   computed: {
     //...mapState("todo", ["status", "todos"])

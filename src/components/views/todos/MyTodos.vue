@@ -69,7 +69,7 @@
                 <div class="actions">
                   <button
                     type="button"
-                    class="btn-picto"
+                    class="btn-picto color-skyblue"
                     @click.stop="toggleTodoCompletedStatus(todo.id,'TODO_DONE')"
                     :aria-label="todo.completed ? 'Undone' : 'Done'"
                     :title="todo.completed ? 'Undone' : 'Done'"
@@ -83,7 +83,7 @@
                     type="button"
                     aria-label="Delete"
                     title="Delete"
-                    class="btn-picto"
+                    class="btn-picto color-red"
                   >
                     <i aria-hidden="true" class="material-icons">delete</i>
                   </button>
@@ -159,7 +159,7 @@
                 <div class="actions">
                   <button
                     type="button"
-                    class="btn-picto"
+                    class="btn-picto color-skyblue"
                     @click.stop="toggleTodoCompletedStatus(todo.id,'TODO_UNDONE')"
                     :aria-label="todo.completed ? 'Undone' : 'Done'"
                     :title="todo.completed ? 'Undone' : 'Done'"
@@ -173,7 +173,7 @@
                     type="button"
                     aria-label="Delete"
                     title="Delete"
-                    class="btn-picto"
+                    class="btn-picto color-red"
                   >
                     <i aria-hidden="true" class="material-icons">delete</i>
                   </button>
@@ -215,10 +215,13 @@ export default {
       let $ = JQuery;
       let element = this.$refs.addNewTodoModal.$el;
       let todo = {
-        title: "",
-        desc: "",
-        completed: false,
-        date: ""
+            id:null,
+            title: null,
+			priority:null,
+            desc: null,
+            completed: false,
+            date: null,
+			tags:[]
       };
       this.$refs.addNewTodoModal.setUseraction("CREATE", todo);
       $(element)
@@ -240,22 +243,30 @@ export default {
           backdrop: "static",
           keyboard: false
         })
-        .on("click", "#delete_me", e => {
+        .one("click", "#delete_me", (e) => {
           $(element).modal("toggle");
+           $(this).off(e);
           this.action_delete_todo(id);
-          console.log(e);
         });
-
-      // this.action_delete_todo(id);
     },
     editTodoModal: function(id) {
+    //this should be get call to find todo from db
       let $ = JQuery;
       const todos = this.$store.state.todo.todos;
       let index = todos.findIndex(todo => todo.id === id);
       if (index >= 0) {
-        this.$refs.addNewTodoModal.setUseraction("EDIT", todos[index]);
+        let thisTodo= todos[index];
+        this.$refs.addNewTodoModal.setUseraction("EDIT", thisTodo);
         let element = this.$refs.addNewTodoModal.$el;
-        $(element).modal("show");
+       $(element)
+        .modal({
+          backdrop: "static",
+          keyboard: false
+        })
+        .on("click", "#submitNewTodo", () => {
+          $(element).modal("toggle");
+        });
+
       }
     },
     toggleTodoCompletedStatus: function(id,action) {
@@ -271,7 +282,6 @@ export default {
           $(element).modal("toggle");
           $(this).off(e);
           this.action_toggle_completed_todo(id);
-          
         });
        
     },
@@ -483,8 +493,15 @@ section.main-section {
   background: none;
   -webkit-appearance: none;
   cursor: pointer;
+
+}
+.color-red{
+  color: #ea0909;
+}
+.color-skyblue{
   color: #11cdef;
 }
+
 /* FORM */
 form {
   margin-top: 3rem;
@@ -649,12 +666,12 @@ form input,
   font-size: 20px;
 }
 .todo-info {
-  flex: 1 70%;
+  flex: 1 60%;
 }
 .todo-date {
   font-size: 12px;
   color: #8898aa;
-  flex: 1 10%;
+  flex: 1 20%;
 }
 .my-style .vue-notification .notification-title {
   color: red !important;
@@ -776,11 +793,11 @@ form input,
     flex-wrap: wrap;
   }
   .todo-info {
-    flex: 1 70%;
+    flex: 1 60%;
     padding: 0 0 0 0.2rem;
   }
   .todo-priority {
-    flex: 1 25%;
+    flex: 1 20%;
     display: flex;
     align-items: center;
     order: 2;
@@ -794,7 +811,7 @@ form input,
     flex-grow: 0;
   }
   .todo-date {
-    flex: 1 10%;
+    flex: 1 20%;
     align-items: center;
   }
   #todolist .actions {

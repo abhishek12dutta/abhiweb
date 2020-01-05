@@ -3,10 +3,12 @@ import Vue from 'vue'
 import App from './App.vue';
 import 'bootstrap'; 
 import 'bootstrap/dist/css/bootstrap.min.css'; 
+import VueTelInput from 'vue-tel-input';
 import router from './router';
 import store from './store/store';
 import VeeValidate from 'vee-validate';
 Vue.use(VeeValidate);
+Vue.use(VueTelInput);
 
 Vue.config.productionTip = false;
 //Vue.use(VeeValidate);

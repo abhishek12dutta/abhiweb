@@ -6,8 +6,8 @@ const state = {
             title: "Todo Item 1, compled todo functionality",
 			priority:"High",
             desc: "This is First ToDO item",
-            completed: false,
-            date: "22/11/2019",
+            completed: true,
+            date: "12/01/2019",
 			tags:["abc","def","fgh"]
         },
         {
@@ -16,7 +16,7 @@ const state = {
 			priority:"High",
             desc: "This is First ToDO item",
             completed: false,
-            date: "23/11/2019",
+            date: "25/01/2020",
 			tags:["abc","def","fgh"]
         },
         {
@@ -34,7 +34,7 @@ const state = {
 			priority:"High",
             desc: "This is First ToDO item",
             completed: false,
-            date: "11/11/2019",
+            date: "01/25/2020",
 			tags:["abc","def","fgh"]
         },
         {
@@ -68,6 +68,9 @@ const actions = {
     },
     action_toggle_completed_todo({ commit }, id) {
         commit('MU_TOGGLE_COMPLETED_STATUS', id);
+    },
+    action_edit_todo({ commit }, todo) {
+        commit('MU_EDIT_TODO', todo);
     }
 };
 
@@ -90,6 +93,12 @@ const mutations = {
         console.log('index  is: ' + index);
         if(index >=0){
             state.todos[index].completed=!state.todos[index].completed;
+        }
+    },
+    MU_EDIT_TODO(state, newtodo) {
+        let index = state.todos.findIndex(todo => todo.id === newtodo.id);
+        if(index >=0){
+            state.todos.splice(index,1,newtodo);
         }
     }
 
