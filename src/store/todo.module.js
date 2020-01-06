@@ -1,61 +1,69 @@
+const axios = require("axios");
+
+const _axios = axios.create({
+  baseURL: "http://localhost:8080/api",
+  timeout: 50000,
+  headers: { "Content-Type": "application/json" }
+});
+
 const state = {
-    //todos: [],
-    todos: [
-        {
-            id:1,
-            title: "Todo Item 1, compled todo functionality",
-			priority:"High",
-            desc: "This is First ToDO item",
-            completed: true,
-            date: "12/01/2019",
-			tags:["abc","def","fgh"]
-        },
-        {
-            id:2,
-            title: "Todo Item 2, compled todo functionality",
-			priority:"High",
-            desc: "This is First ToDO item",
-            completed: false,
-            date: "25/01/2020",
-			tags:["abc","def","fgh"]
-        },
-        {
-            id:3,
-            title: "Todo Item 3, compled todo functionality",
-			priority:"High",
-            desc: "This is First ToDO item",
-            completed: true,
-            date: "24/11/2019",
-			tags:["abc","def","fgh"]
-        },
-        {
-            id:4,
-            title: "Todo Item 4, compled todo functionality",
-			priority:"High",
-            desc: "This is First ToDO item",
-            completed: false,
-            date: "01/25/2020",
-			tags:["abc","def","fgh"]
-        },
-        {
-            id:5,
-            title: "Todo Item 5, compled todo functionality",
-			priority:"High",
-            desc: "This is First ToDO item",
-            completed: false,
-            date: "10/11/2019",
-			tags:["abc","def","fgh"]
-        },
-        {
-            id:6,
-            title: "Todo Item 6, compled todo functionality",
-			priority:"High",
-            desc: "This is First ToDO item",
-            completed: true,
-            date: "22/11/2019",
-			tags:["abc","def","fgh"]
-        }
-    ],
+    todos: [],
+    // todos: [
+    //     {
+    //         id:1,
+    //         title: "Todo Item 1, compled todo functionality",
+	// 		priority:"High",
+    //         desc: "This is First ToDO item",
+    //         completed: true,
+    //         date: "12/01/2019",
+	// 		tags:["abc","def","fgh"]
+    //     },
+    //     {
+    //         id:2,
+    //         title: "Todo Item 2, compled todo functionality",
+	// 		priority:"High",
+    //         desc: "This is First ToDO item",
+    //         completed: false,
+    //         date: "25/01/2020",
+	// 		tags:["abc","def","fgh"]
+    //     },
+    //     {
+    //         id:3,
+    //         title: "Todo Item 3, compled todo functionality",
+	// 		priority:"High",
+    //         desc: "This is First ToDO item",
+    //         completed: true,
+    //         date: "24/11/2019",
+	// 		tags:["abc","def","fgh"]
+    //     },
+    //     {
+    //         id:4,
+    //         title: "Todo Item 4, compled todo functionality",
+	// 		priority:"High",
+    //         desc: "This is First ToDO item",
+    //         completed: false,
+    //         date: "01/25/2020",
+	// 		tags:["abc","def","fgh"]
+    //     },
+    //     {
+    //         id:5,
+    //         title: "Todo Item 5, compled todo functionality",
+	// 		priority:"High",
+    //         desc: "This is First ToDO item",
+    //         completed: false,
+    //         date: "10/11/2019",
+	// 		tags:["abc","def","fgh"]
+    //     },
+    //     {
+    //         id:6,
+    //         title: "Todo Item 6, compled todo functionality",
+	// 		priority:"High",
+    //         desc: "This is First ToDO item",
+    //         completed: true,
+    //         date: "22/11/2019",
+	// 		tags:["abc","def","fgh"]
+    //     }
+    // ],
     todo: null
 };
 
@@ -71,6 +79,9 @@ const actions = {
     },
     action_edit_todo({ commit }, todo) {
         commit('MU_EDIT_TODO', todo);
+    },
+    action_feth_my_todos({ commit }) {
+        commit('MU_FETCH_MY_TODOS');
     }
 };
 
@@ -100,6 +111,24 @@ const mutations = {
         if(index >=0){
             state.todos.splice(index,1,newtodo);
         }
+    },
+    MU_FETCH_MY_TODOS(state){
+        const token = localStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: 'Bearer '+token
+            }
+          };
+
+        _axios
+        .get("/todo/mytodos", options)
+        .then(function(response) {
+            state.todos=response.data;
+        })
+        .catch(function(error) {
+          console.log(error.response);
+        });
+        
     }
 
 };
@@ -111,6 +140,7 @@ const getters = {
     incompletedTodos: state => {
         return state.todos.filter(todo => !todo.completed)
     }
+
 
 };
 

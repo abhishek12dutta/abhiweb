@@ -64,7 +64,6 @@
                     </span>
                   </div>
                 </div>
-
                 <span class="todo-date">{{ todo.date }}</span>
                 <div class="actions">
                   <button
@@ -154,7 +153,6 @@
                     </span>
                   </div>
                 </div>
-
                 <span class="todo-date">{{ todo.date }}</span>
                 <div class="actions">
                   <button
@@ -177,6 +175,7 @@
                   >
                     <i aria-hidden="true" class="material-icons">delete</i>
                   </button>
+                  
                 </div>
               </li>
             </ul>
@@ -194,21 +193,21 @@ import ModalForm from "./ModalForm";
 import DeleteModal from "../../template/DeleteModal";
 import JQuery from "jquery";
 import { mapState, mapActions, mapGetters } from "vuex";
+import { api } from '../../../services/api';
 export default {
   name: "MyTodos",
   components: {
     ModalForm,
     DeleteModal
   },
-  //   data() {
-  //     return {
-  //       todos: ["TODO 1", "TODO 3", "TODO 2", "TODO 2"]
-  //     };
-  //   },
+  mounted: function(){
+    this.fetch_my_todos();
+  },
   methods: {
     ...mapActions("todo", [
       "action_delete_todo",
-      "action_toggle_completed_todo"
+      "action_toggle_completed_todo",
+      "action_feth_my_todos"
     ]),
     ...mapState("todo", ["todos"]),
     openNewTodoModal() {
@@ -252,10 +251,13 @@ export default {
     editTodoModal: function(id) {
     //this should be get call to find todo from db
       let $ = JQuery;
-      const todos = this.$store.state.todo.todos;
-      let index = todos.findIndex(todo => todo.id === id);
-      if (index >= 0) {
-        let thisTodo= todos[index];
+      //const todos = this.$store.state.todo.todos;
+      //let index = todos.findIndex(todo => todo.id === id);
+      console.log('Todo vue id is: ' + id);
+       var thisTodo = api.fetchTodoById(id);
+        console.log('Todo vue id is: ' + thisTodo);
+      if (thisTodo != null) {
+        //let thisTodo= todos[index];
         this.$refs.addNewTodoModal.setUseraction("EDIT", thisTodo);
         let element = this.$refs.addNewTodoModal.$el;
        $(element)
@@ -285,6 +287,9 @@ export default {
         });
        
     },
+    fetch_my_todos: function() {
+      this.action_feth_my_todos();
+    }
   },
   computed: {
     // ...mapState("todo", ["todos"]),

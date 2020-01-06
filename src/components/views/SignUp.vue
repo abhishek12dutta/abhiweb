@@ -190,7 +190,4 @@ export default {
 </script>
 
 <style scoped>
-article {
-  width: 45%;
-}
 </style>

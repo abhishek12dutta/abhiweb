@@ -1,19 +1,19 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light" style="background-color: rgba(2, 162, 210);">
+  <nav class="navbar navbar-expand-lg navbar-light" v-bind:class=" { 'navbarOpen': show }" style="background-color: rgba(2, 162, 210);">
     <router-link class="navbar-brand" to="/">Money Manager</router-link>
     <button
       class="navbar-toggler"
       type="button"
       data-toggle="collapse"
-      data-target="#navbarSupportedContent"
       aria-controls="navbarSupportedContent"
       aria-expanded="false"
       aria-label="Toggle navigation"
+      data-target="#navbarSupportedContent" @click.stop="toggleNavbar()"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" v-bind:class="{ 'show': show }">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
           <!-- <a class="nav-link" href:to="{ name: 'home' }"
@@ -70,21 +70,38 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import JQuery from "jquery";
 export default {
-
   data() {
     return {
-      //loggedIn: false
+      show: true
     };
+  },
+  mounted: function(){
+    this.toggleMenu();
   },
   computed: {
  ...mapState('account', ['status','user'])
-
   },
   methods: {
+    toggleNavbar() {
+      this.show = !this.show
+    },
+    toggleMenu(){
+      let $ = JQuery;
+       var navMain = $(".navbar-collapse");
+       var home = $(".navbar-brand");
+
+        navMain.on("click", "a", null, function () {
+         navMain.collapse('hide');
+        });
+
+        home.on("click", function () {
+         navMain.collapse('hide');
+        });
+    }
   }
 
-  
 };
 </script>
 <style scoped>
