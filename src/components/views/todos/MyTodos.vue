@@ -2,13 +2,20 @@
   <div class="main-wrapper" id="todolist">
     <div class="row">
       <div class="col-4">
-        <span class="badge badge-primary">Total : {{incompletedTodos.length+completedTodos.length || 0}}</span>
+        <span class="badge badge-primary"
+          >Total :
+          {{ incompletedTodos.length + completedTodos.length || 0 }}</span
+        >
       </div>
       <div class="col-4">
-        <span class="badge badge-warning">Pending : {{incompletedTodos.length || 0}}</span>
+        <span class="badge badge-warning"
+          >Pending : {{ incompletedTodos.length || 0 }}</span
+        >
       </div>
       <div class="col-4">
-        <span class="badge badge-success">Completed : {{completedTodos.length || 0}}</span>
+        <span class="badge badge-success"
+          >Completed : {{ completedTodos.length || 0 }}</span
+        >
       </div>
       <div class="col-md-12 mt-3"></div>
     </div>
@@ -69,7 +76,9 @@
                   <button
                     type="button"
                     class="btn-picto color-skyblue"
-                    @click.stop="toggleTodoCompletedStatus(todo.id,'TODO_DONE')"
+                    @click.stop="
+                      toggleTodoCompletedStatus(todo.id, 'TODO_DONE')
+                    "
                     :aria-label="todo.completed ? 'Undone' : 'Done'"
                     :title="todo.completed ? 'Undone' : 'Done'"
                   >
@@ -78,7 +87,7 @@
                     }}</i>
                   </button>
                   <button
-                    @click.stop="deleteTodo(todo.id,'DELETE_TODO')"
+                    @click.stop="deleteTodo(todo.id, 'DELETE_TODO')"
                     type="button"
                     aria-label="Delete"
                     title="Delete"
@@ -158,7 +167,9 @@
                   <button
                     type="button"
                     class="btn-picto color-skyblue"
-                    @click.stop="toggleTodoCompletedStatus(todo.id,'TODO_UNDONE')"
+                    @click.stop="
+                      toggleTodoCompletedStatus(todo.id, 'TODO_UNDONE')
+                    "
                     :aria-label="todo.completed ? 'Undone' : 'Done'"
                     :title="todo.completed ? 'Undone' : 'Done'"
                   >
@@ -167,7 +178,7 @@
                     }}</i>
                   </button>
                   <button
-                    @click.stop="deleteTodo(todo.id,'DELETE_TODO')"
+                    @click.stop="deleteTodo(todo.id, 'DELETE_TODO')"
                     type="button"
                     aria-label="Delete"
                     title="Delete"
@@ -175,7 +186,6 @@
                   >
                     <i aria-hidden="true" class="material-icons">delete</i>
                   </button>
-                  
                 </div>
               </li>
             </ul>
@@ -193,14 +203,14 @@ import ModalForm from "./ModalForm";
 import DeleteModal from "../../template/DeleteModal";
 import JQuery from "jquery";
 import { mapState, mapActions, mapGetters } from "vuex";
-import { api } from '../../../services/api';
+import * as api from "../../../services/api";
 export default {
   name: "MyTodos",
   components: {
     ModalForm,
     DeleteModal
   },
-  mounted: function(){
+  mounted: function() {
     this.fetch_my_todos();
   },
   methods: {
@@ -214,13 +224,13 @@ export default {
       let $ = JQuery;
       let element = this.$refs.addNewTodoModal.$el;
       let todo = {
-            id:null,
-            title: null,
-			priority:null,
-            desc: null,
-            completed: false,
-            date: null,
-			tags:[]
+        id: null,
+        title: null,
+        priority: null,
+        desc: null,
+        completed: false,
+        date: null,
+        tags: []
       };
       this.$refs.addNewTodoModal.setUseraction("CREATE", todo);
       $(element)
@@ -233,7 +243,7 @@ export default {
         });
     },
 
-    deleteTodo: function(id,action) {
+    deleteTodo: function(id, action) {
       let $ = JQuery;
       let element = this.$refs.deleteModal.$el;
       this.$refs.deleteModal.setTODOAction(action);
@@ -242,36 +252,32 @@ export default {
           backdrop: "static",
           keyboard: false
         })
-        .one("click", "#delete_me", (e) => {
+        .one("click", "#delete_me", e => {
           $(element).modal("toggle");
-           $(this).off(e);
+          $(this).off(e);
           this.action_delete_todo(id);
         });
     },
     editTodoModal: function(id) {
-    //this should be get call to find todo from db
+      //this should be get call to find todo from db
       let $ = JQuery;
       //const todos = this.$store.state.todo.todos;
       //let index = todos.findIndex(todo => todo.id === id);
-      console.log('Todo vue id is: ' + id);
-       var thisTodo = api.fetchTodoById(id);
-        console.log('Todo vue id is: ' + thisTodo);
-      if (thisTodo != null) {
-        //let thisTodo= todos[index];
-        this.$refs.addNewTodoModal.setUseraction("EDIT", thisTodo);
+      console.log("Todo vue id is: " + id);
+      api.fetchTodoById(id).then(todo => {
+        this.$refs.addNewTodoModal.setUseraction("EDIT", todo);
         let element = this.$refs.addNewTodoModal.$el;
-       $(element)
-        .modal({
-          backdrop: "static",
-          keyboard: false
-        })
-        .on("click", "#submitNewTodo", () => {
-          $(element).modal("toggle");
-        });
-
-      }
+        $(element)
+          .modal({
+            backdrop: "static",
+            keyboard: false
+          })
+          .on("click", "#submitNewTodo", () => {
+            $(element).modal("toggle");
+          });
+      });
     },
-    toggleTodoCompletedStatus: function(id,action) {
+    toggleTodoCompletedStatus: function(id, action) {
       let $ = JQuery;
       let element = this.$refs.deleteModal.$el;
       this.$refs.deleteModal.setTODOAction(action);
@@ -280,12 +286,11 @@ export default {
           backdrop: "static",
           keyboard: false
         })
-        .one("click", "#delete_me", (e)=>{
+        .one("click", "#delete_me", e => {
           $(element).modal("toggle");
           $(this).off(e);
           this.action_toggle_completed_todo(id);
         });
-       
     },
     fetch_my_todos: function() {
       this.action_feth_my_todos();
@@ -498,12 +503,11 @@ section.main-section {
   background: none;
   -webkit-appearance: none;
   cursor: pointer;
-
 }
-.color-red{
+.color-red {
   color: #ea0909;
 }
-.color-skyblue{
+.color-skyblue {
   color: #11cdef;
 }
 
@@ -824,14 +828,13 @@ form input,
   }
 }
 
-.High{
-  background:red;
+.High {
+  background: red;
 }
-.Medium{
-background:green;
+.Medium {
+  background: green;
 }
-.Low{
-background:greenyellow;
+.Low {
+  background: greenyellow;
 }
-
 </style>

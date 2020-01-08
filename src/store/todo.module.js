@@ -74,11 +74,43 @@ const actions = {
     action_delete_todo({ commit }, id) {
         commit('MU_DELETE_TODO', id);
     },
-    action_toggle_completed_todo({ commit }, id) {
-        commit('MU_TOGGLE_COMPLETED_STATUS', id);
+    action_toggle_completed_todo({dispatch,commit }, id) {
+        const token = localStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: 'Bearer '+token
+            }
+          };
+
+        _axios
+        .put(`/todo/mytodo/togglestatus/${id}`,null,options)
+        .then(function() {
+            commit('MU_TOGGLE_COMPLETED_STATUS', id);
+        })
+        .catch(function(error) {
+            dispatch("alert/error", error, { root: true });
+        });
+        
     },
-    action_edit_todo({ commit }, todo) {
-        commit('MU_EDIT_TODO', todo);
+    action_edit_todo({ dispatch, commit }, todo) {
+
+        const token = localStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: 'Bearer '+token
+            }
+          };
+
+        _axios
+        .put(`/todo/mytodo/update/${todo.id}`,todo,options)
+        .then(function() {
+            commit('MU_EDIT_TODO', todo);
+        })
+        .catch(function(error) {
+            dispatch("alert/error", error, { root: true });
+        });
+
+        
     },
     action_feth_my_todos({ commit }) {
         commit('MU_FETCH_MY_TODOS');
@@ -107,6 +139,7 @@ const mutations = {
         }
     },
     MU_EDIT_TODO(state, newtodo) {
+
         let index = state.todos.findIndex(todo => todo.id === newtodo.id);
         if(index >=0){
             state.todos.splice(index,1,newtodo);
