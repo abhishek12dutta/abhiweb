@@ -68,11 +68,43 @@ const state = {
 };
 
 const actions = {
-    action_add_todo({ commit }, todo) {
-        commit('MU_ADD_TODO', todo);
+    action_add_todo({ dispatch,commit }, todo) {
+
+        const token = localStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: 'Bearer '+token
+            }
+          };
+
+        _axios
+        .post(`/todo/create`,todo,options)
+        .then(function(response) {
+            commit('MU_ADD_TODO', response.data);
+        })
+        .catch(function(error) {
+            dispatch("alert/error", error, { root: true });
+        });
+
+
+        
     },
-    action_delete_todo({ commit }, id) {
-        commit('MU_DELETE_TODO', id);
+    action_delete_todo({ dispatch, commit }, id) {
+        const token = localStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: 'Bearer '+token
+            }
+          };
+        _axios
+        .delete(`/todo/mytodo/delete/${id}`,options)
+        .then(function() {
+            commit('MU_DELETE_TODO', id);
+        })
+        .catch(function(error) {
+            dispatch("alert/error", error, { root: true });
+        });
+        
     },
     action_toggle_completed_todo({dispatch,commit }, id) {
         const token = localStorage.getItem('token');

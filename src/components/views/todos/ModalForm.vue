@@ -128,9 +128,6 @@ export default {
       if (this.useraction == "EDIT") {
         this.action_edit_todo(this.todo);
       } else {
-        this.todo.id = Math.random()
-          .toString(36)
-          .substr(2, 9);
         this.action_add_todo(this.todo);
       }
     },
