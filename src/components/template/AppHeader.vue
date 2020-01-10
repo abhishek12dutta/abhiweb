@@ -27,7 +27,7 @@
           <router-link class="nav-link" to="/myTodos">MyTodos</router-link>
         </li>
           <li class="nav-item">
-          <a class="nav-link" href="#">Link2</a>
+          <router-link class="nav-link" to="/nextGenTodos">NextGenTodos</router-link>
         </li>
           <li class="nav-item">
           <a class="nav-link" href="#">Link3</a>

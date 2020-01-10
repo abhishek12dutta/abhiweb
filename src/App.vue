@@ -17,6 +17,7 @@
 <script>
 import AppHeader from "./components/template/AppHeader";
 import { mapState, mapActions } from "vuex";
+import './assets/css/tailwind.css';
 export default {
   name: "App",
 

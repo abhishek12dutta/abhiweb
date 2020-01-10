@@ -4,6 +4,7 @@ import Home from './components/views/Home';
 import Login from './components/views/Login';
 import SignUp from './components/views/SignUp';
 import MyTodos from './components/views/todos/MyTodos';
+import NextGenTodos from './components/views/todos/NextGenTodos';
 Vue.use(Router);
 
 let router = new Router({
@@ -39,7 +40,14 @@ let router = new Router({
           requiresAuth: true
         }
       },
-      
+      {
+        path: '/nextGenTodos',
+        name: 'nextGenTodos',
+        component: NextGenTodos,
+        meta: { 
+          requiresAuth: true
+        }
+      },
   ]
 })
 
