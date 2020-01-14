@@ -4,9 +4,6 @@ import axios from 'axios';
 //   fetchTodoById
 // };  
 
-
-
-
 export const fetchTodoById = id => {
   const _axios = axios.create({
     baseURL: "http://localhost:8080/api",

@@ -45,7 +45,8 @@ let router = new Router({
         name: 'nextGenTodos',
         component: NextGenTodos,
         meta: { 
-          requiresAuth: true
+         // requiresAuth: true
+          guest: true
         }
       },
   ]
@@ -58,7 +59,7 @@ router.beforeEach((to, from, next) => {
     if (localStorage.getItem('token') == null) {
       next({
         path: '/login',
-        query: { redirect: to.fullPath }
+        query: { redirect: true }
       })
     } else {
       next()

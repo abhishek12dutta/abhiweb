@@ -1,149 +1,125 @@
 <template>
-  <div id="app" class="border-2 bg-gray-200 md:flex flex-wrap justify-between">
-    
-    <div class="list-group col-md-3">
-      <pre>{{listString}}</pre>
-    </div>
-    <div class="list-group col-md-3">
-      <pre>{{list2String}}</pre>
-    </div>
-
-    <div class="text-gray-700 text-center bg-gray-400 md:px-4 py-2 m-2 flex-1">
-      <h2>Incompleted</h2>
-      <draggable
-        :list="users"
-        :animation="200"    
-        filter=".action-button"
-        class="w-full max-w-md"
-        tag="ul"
-        v-bind="dragOptions" :move="onMove" @start="isDragging=true" @end="onEnd"
+  <div class="main-wrapper" id="todolist">
+    <div class="box-footer clearfix no-border">
+      <button
+        type="button"
+        class="btn btn-default pull-right"
+        @click="openNewTodoModal"
       >
-          <transition-group type="transition" :name="'flip-list'">
-          <user-card
-            v-for="user in users"
-            :key="user.order"
-            :user="user"
-            @on-edit="onEdit"
-            @on-delete="onDelete"
-          ></user-card>
-        </transition-group>
-      </draggable>
+        <i class="fa fa-plus"></i> Add item
+      </button>
     </div>
-    <div class="text-gray-700 text-center bg-gray-400 md:px-4 py-2 m-2 flex-1">
-      <h2>completed</h2>
-      <draggable
-        :list="completedUsers"
-        :animation="200"
-        filter=".action-button"
-        class="w-full max-w-md"
-        tag="ul"
-        v-bind="dragOptions" :move="onMove" @end="onEnd"
-      >
-       <transition-group name="no" class="list-group" tag="ul">
-          <user-card
-            v-for="user in completedUsers"
-            :key="user.order"
-            :user="user"
-            @on-edit="onEdit"
-            @on-delete="onDelete"
-          ></user-card>
-        </transition-group>
-      </draggable>
+    <div class="row">
+      <div class="col-4">
+        <span class="badge badge-primary"
+          >Total :
+          {{ incompletedTodos.length + completedTodos.length || 0 }}</span
+        >
+      </div>
+      <div class="col-4">
+        <span class="badge badge-warning"
+          >Pending : {{ incompletedTodos.length || 0 }}</span
+        >
+      </div>
+      <div class="col-4">
+        <span class="badge badge-success"
+          >Completed : {{ completedTodos.length || 0 }}</span
+        >
+      </div>
     </div>
-
-    <!-- <draggable
-      :list="users"
-      :animation="200"
-      ghost-class="moving-card"
-      group="users"
-      filter=".action-button"
-      class="w-full max-w-md"
-      tag="ul"
+    <div
+      id="app"
+      class="border-2 bg-gray-200 md:flex flex-wrap justify-between"
     >
-      <user-card
-        v-for="user in users"
-        :key="user.id"
-        :user="user"
-        @on-edit="onEdit"
-        @on-delete="onDelete"
-      ></user-card>
-    </draggable> -->
+      <div
+        class="text-gray-700 text-center bg-gray-400 md:px-4 py-2 m-2 flex-1"
+      >
+        <div class="box box-aqua">
+          <h3 class="box-title">Open Todos</h3>
+        </div>
+        <draggable
+          class="w-full list-group min-height-20"
+          :list="todosList"
+          v-bind="dragOptions"
+          tag="ul"
+          @add="onAdd($event, true)"
+        >
+          <transition-group type="transition" :name="'flip-list'">
+            <!-- v-for="(todo, index) in incompletedTodos"
+                v-bind:key="index" -->
+
+            <user-card
+              v-for="todo in incompletedTodos"
+              :key="todo.id"
+              :todo="todo"
+              :data-id="todo.id"
+              @on-edit="onEdit"
+              @on-delete="onDelete"
+            ></user-card>
+          </transition-group>
+        </draggable>
+      </div>
+      <div
+        class="text-gray-700 text-center bg-gray-400 md:px-4 py-2 m-2 flex-1"
+      >
+        <div class="box box-green">
+          <h3 class="box-title">Completed Todos</h3>
+        </div>
+        <draggable
+          class="w-full list-group min-height-20"
+          :list="todosList"
+          v-bind="dragOptions"
+          tag="ul"
+          @add="onAdd($event, false)"
+        >
+          <transition-group name="no" class="list-group" tag="ul">
+            <user-card
+              v-for="todo in completedTodos"
+              :key="todo.id"
+              :todo="todo"
+              :data-id="todo.id"
+              @on-edit="onEdit"
+              @on-delete="onDelete"
+            ></user-card>
+          </transition-group>
+        </draggable>
+      </div>
+    </div>
+    <CreateTODOModal></CreateTODOModal>
+    <EditTodoModal></EditTodoModal>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
 import UserCard from "../../template/UserCard";
+import { mapState, mapActions, mapGetters } from "vuex";
+import CreateTODOModal from "../../template/modal/CreateTODOModal";
+import EditTodoModal from "../../template/modal/EditTodoModal";
+
+
 export default {
   name: "App",
   components: {
     draggable,
-    UserCard
+    UserCard,
+    CreateTODOModal,
+    EditTodoModal
+  },
+  props: {
+    todosList: []
   },
   data() {
     return {
-      users: [
-        {
-          id: 1,
-          order: 1,
-          name: "Adrian Schubert",
-          avatar:
-            "https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
-        },
-        {
-          id: 2,
-          order: 2,
-          name: "Violet Gates",
-          avatar: "https://pickaface.net/gallery/avatar/freud51c8b3f65e7dc.png"
-        },
-        {
-          id: 3,
-          order: 3,
-          name: "Steve Jobs",
-          avatar: "https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png"
-        },
-        {
-          id: 4,
-          order: 4,
-          name: "Yassine Smith",
-          avatar:
-            "https://pickaface.net/gallery/avatar/unr_yassine_191124_2012_3gngr.png"
-        },
-        {
-          id: 5,
-          order: 5,
-          name: "Senior Saez",
-          avatar:
-            "https://pickaface.net/gallery/avatar/elmedinilla541c03412955c.png"
-        }
-      ],
-      completedUsers: [
-        {
-          id: 6,
-          order: 6,
-          name: "XYZ",
-          avatar:
-            "https://pickaface.net/gallery/avatar/unr_sample_161118_2054_ynlrg.png"
-        },
-        {
-          id: 7,
-          order: 7,
-          name: "jsahjaa ajaa",
-          avatar: "https://pickaface.net/gallery/avatar/freud51c8b3f65e7dc.png"
-        },
-        {
-          id: 8,
-          order: 8,
-          name: "Abhishek",
-          avatar: "https://pickaface.net/gallery/avatar/Opi51c74d0125fd4.png"
-        }
-      ],
-      editable: true,
-      isDragging: false,
-      delayedDragging: false
+      //todosList:[]
     };
   },
+  mounted: function() {
+    this.fetch_my_todos();
+  },
+
   computed: {
+    ...mapGetters("todo", ["completedTodos", "incompletedTodos"]),
     dragOptions() {
       return {
         animation: 200,
@@ -151,45 +127,41 @@ export default {
         disabled: false,
         ghostClass: "ghost"
       };
-    },
-    listString() {
-      return JSON.stringify(this.users, null, 2);
-    },
-    list2String() {
-      return JSON.stringify(this.completedUsers, null, 2);
     }
   },
   methods: {
-    onEdit(user) {
-      alert(`Editing ${user.name}`);
+    ...mapActions("todo", [
+      "action_delete_todo",
+      "action_toggle_completed_todo",
+      "action_feth_my_todos"
+    ]),
+    ...mapState("todo", ["todos"]),
+    onAdd(event, isCompleted) {
+      let id = event.item.getAttribute("data-id");
+      let todo = event.item.getAttribute("todo");
+      // axios.patch('/admin/testimonialsVisibility/' + id, {
+      //     visible: visible
+      // }).then((response) => {
+      //     // success message
+      // })
+      console.log("todo is: " + JSON.stringify(todo, null, 2));
+      console.log("id is: " + id);
+      console.log("Completed is: " + isCompleted);
     },
-    onDelete(user) {
-      alert(`Deleting ${user.name}`);
+    openNewTodoModal() {
+      //  this.$modal.show('createNewTodoModal',{ id: 1 });
+      this.$modal.show("createNewTodoModal");
     },
-    onMove({ relatedContext, draggedContext}) {
-      const relatedElement = relatedContext.element;
-      const draggedElement = draggedContext.element;
-      return (
-        (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-      );
-
-
-      //console.log('relatedElement:' + JSON.stringify(relatedElement, null, 2));
-      //console.log('draggedElement:' + JSON.stringify(draggedElement, null, 2));
+    onEdit(todo) {
+      const id = todo.id;
+      console.log('Curently edit todo, Id is : ' + id);
+      this.$modal.show("editTodoModal", { id: id });
     },
-    onEnd: function(evt){ 
-      // const relatedElement = relatedContext.element;
-      // const draggedElement = draggedContext.element;
-
-      // console.log('relatedElement' + relatedElement)
-      // console.log('draggedElement' + draggedElement)
-      console.log('onEnd');
-      console.log('OldIndex' + evt.oldIndex)
-      console.log('newIndex' + evt.newIndex)
-      //console.log('from' + evt)
-      //console.log('to' + evt)
-
-    //  console.log(this.users[evt.oldIndex].id)
+    onDelete(todo) {
+      alert(`Deleting ${todo.id}`);
+    },
+    fetch_my_todos: function() {
+      this.action_feth_my_todos();
     }
   }
 };
@@ -200,5 +172,25 @@ export default {
 but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
 .moving-card {
   background: #f7fafc;
+}
+
+.box.box-aqua {
+  border: 3px solid #00c0ef;
+}
+.box.box-green {
+  border: 3px solid #00a65a !important;
+}
+
+.box {
+  position: relative;
+  border-radius: 3px;
+  background: #ffffff;
+  border-top: 3px solid #d2d6de;
+  margin-bottom: 20px;
+  width: 100%;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.box-title {
+  font-size: 18px;
 }
 </style>

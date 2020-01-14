@@ -131,7 +131,7 @@ const actions = {
         commit("MU_REGISTER_FALIURE", error);
         dispatch("alert/error", error, { root: true });
       });
-  }
+  },
 };
 
 const mutations = {

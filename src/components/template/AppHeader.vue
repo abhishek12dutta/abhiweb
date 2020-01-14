@@ -35,12 +35,13 @@
       </ul>
       <ul class="navbar-nav navbar-right">
         <li class="nav-item" v-if="!status.loggedIn">
-          <!-- <a class="nav-link" href="#">Login</a> -->
-          <router-link class="nav-link" to="/login">Login</router-link>
+          <!-- <router-link class="nav-link" to="/login">Login</router-link> -->
+          <ModalLogin />
         </li>
 
         <li class="nav-item" v-if="!status.loggedIn">
-          <router-link class="nav-link" to="/signup">Signup</router-link>
+          <!-- <router-link class="nav-link" to="/signup">Signup</router-link> -->
+           <ModalRegister />
         </li>
 
         <li class="nav-item dropdown" v-if="status.loggedIn">
@@ -71,7 +72,13 @@
 <script>
 import { mapState } from "vuex";
 import JQuery from "jquery";
+import ModalLogin from '../template/modal/ModalLogin'
+import ModalRegister from '../template/modal/ModalRegister.vue'
 export default {
+  components: {
+    ModalLogin,
+    ModalRegister,
+  },
   data() {
     return {
       show: true
