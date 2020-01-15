@@ -106,6 +106,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import * as api from "../../../services/api";
 export default {
   name: "CreateTODOModal",
   components: {
@@ -126,20 +127,20 @@ export default {
   },
   methods: {
     ...mapActions("todo", ["action_add_todo"]),
-    beforeOpen(event) {
-      let todoid = event.params.id;
-      if (todoid != null) {
-        let t = {
-          id: 1,
-          title: "Todo Item 1, compled todo functionality",
-          priority: "High",
-          desc: "This is First ToDO item",
-          completed: true,
-          date: new Date().toISOString().substr(0, 10),
-          tags: ["Personal"]
-        };
-        this.todo = t;
-      }
+    beforeOpen() {
+      // let todoid = event.params.id;
+      // if (todoid != null) {
+      //   let t = {
+      //     id: 1,
+      //     title: "Todo Item 1, compled todo functionality",
+      //     priority: "High",
+      //     desc: "This is First ToDO item",
+      //     completed: true,
+      //     date: new Date().toISOString().substr(0, 10),
+      //     tags: ["Personal"]
+      //   };
+      //   this.todo = t;
+      // }
     },
     beforeClose(event) {
       console.log(event);
@@ -149,9 +150,12 @@ export default {
       }
     },
     submitNewTodo() {
-      alert("Submit");
-      this.$modal.hide("createNewTodoModal");
-      this.action_add_todo(this.todo);
+      api.createNewTODO(this.todo).then(newTodo => {
+        this.$modal.hide("createNewTodoModal");
+        this.action_add_todo(newTodo);
+      }).catch(function(error) {
+          alert('error'+error);
+      });
     }
   }
 };

@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const _axios = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "http://192.168.0.103:8080/api",
   timeout: 50000,
   headers: { "Content-Type": "application/json" }
 });
@@ -68,23 +68,28 @@ const state = {
 };
 
 const actions = {
-    action_add_todo({ dispatch,commit }, todo) {
+    action_add_todo({ commit }, todo) {
 
-        const token = localStorage.getItem('token');
-        const options = {
-            headers: {
-              Authorization: 'Bearer '+token
-            }
-          };
+        // const token = localStorage.getItem('token');
+        // const options = {
+        //     headers: {
+        //       Authorization: 'Bearer '+token
+        //     }
+        //   };
 
-        _axios
-        .post(`/todo/create`,todo,options)
-        .then(function(response) {
-            commit('MU_ADD_TODO', response.data);
-        })
-        .catch(function(error) {
-            dispatch("alert/error", error, { root: true });
-        });
+        // _axios
+        // .post(`/todo/create`,todo,options)
+        // .then(function(response) {
+        //     commit('MU_ADD_TODO', response.data);
+        // })
+        // .catch(function(error) {
+        //     dispatch("alert/error", error, { root: true });
+        // });
+
+       
+            commit('MU_ADD_TODO', todo);
+        
+        
 
 
         
@@ -124,24 +129,24 @@ const actions = {
         });
         
     },
-    action_edit_todo({ dispatch, commit }, todo) {
+    action_edit_todo({ commit }, todo) {
 
-        const token = localStorage.getItem('token');
-        const options = {
-            headers: {
-              Authorization: 'Bearer '+token
-            }
-          };
+        // const token = localStorage.getItem('token');
+        // const options = {
+        //     headers: {
+        //       Authorization: 'Bearer '+token
+        //     }
+        //   };
 
-        _axios
-        .put(`/todo/mytodo/update/${todo.id}`,todo,options)
-        .then(function() {
-            commit('MU_EDIT_TODO', todo);
-        })
-        .catch(function(error) {
-            dispatch("alert/error", error, { root: true });
-        });
-
+        // _axios
+        // .put(`/todo/mytodo/update/${todo.id}`,todo,options)
+        // .then(function() {
+        //     commit('MU_EDIT_TODO', todo);
+        // })
+        // .catch(function(error) {
+        //     dispatch("alert/error", error, { root: true });
+        // });
+        commit('MU_EDIT_TODO', todo);
         
     },
     action_feth_my_todos({ commit }) {

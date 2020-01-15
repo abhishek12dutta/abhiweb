@@ -17,7 +17,7 @@
       <h2 class="mb-1 uppercase tracking-wide text-xl text-center">
         Add New Todo
       </h2>
-      <form @submit.prevent="submitNewTodo">
+      <form @submit.prevent="submitEdit">
         <div class="form-group mb-1 mt-2">
           <label
             for="title"
@@ -102,6 +102,7 @@
   </modal>
 </template>
 <script>
+import { mapActions } from "vuex";
 import * as api from "../../../services/api";
 export default {
   name: "EditTodoModal",
@@ -115,6 +116,7 @@ export default {
     };
   },
   methods: {
+      ...mapActions("todo", ["action_edit_todo"]),
     beforeOpen(event) {
        let id=event.params.id;
        console.log('Curently in edit modal with todo Id : ' + id);
@@ -128,6 +130,18 @@ export default {
       if (this.time + this.duration < Date.now()) {
         event.stop();
       }
+    },
+     submitEdit() {
+      api.editTodo(this.todo).then(newTodo => {
+        this.$modal.hide("editTodoModal");
+        this.action_edit_todo(newTodo);
+      }).catch(function(error) {
+          alert('error'+error);
+      });
+
+      
+     
+    //  this.action_add_todo(this.todo);
     }
   }
 };

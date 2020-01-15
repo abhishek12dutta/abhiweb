@@ -5,7 +5,7 @@
     <div class="flex1 w-3/5">
       <!-- <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{user.name}}</p> -->
       <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">
-        Todo Description long text item
+        {{todo.title}}
       </p>
     </div>
     <div class="flex1 w-2/5">
@@ -40,35 +40,22 @@
             </div>
             <span
               class="badge badge-pill badge-info"
-              style="{ background: tag.red, color: '#fff' }"
+              style="{ background: tag.red, color: '#fff' }"  v-for="(tag, key) in todo.tags"
+                      :key="key"
             >
-              ABC
-            </span>
-            <span
-              class="badge badge-pill badge-info"
-              style="{ background: tag.green, color: '#fff' }"
-            >
-              ABC
-            </span>
-            <span
-              class="badge badge-pill badge-info"
-              style="{ background: tag.red, color: '#fff' }"
-            >
-              ABC
+              {{ tag }}
             </span>
           </div>
         </div>
       </div>
-      <div class="flex-1 text-center px-4 m-2">
-        <div class="todo-priority">
-          <div class="priority-dot"></div>
-          <span>High</span>
-        </div>
+      <div class="flex-2 text-center px-2">
+         <span class="todo-date">{{ todo.date }}</span>
       </div>
       <div class="flex-1 text-center px-4 m-2">
         <div class="todo-priority">
-          <div class="priority-dot"></div>
-          <span>High</span>
+          <div class="priority-dot" :class="todo.priority"></div>
+          <span>{{ todo.priority }}</span>
+          
         </div>
       </div>
     </div>
@@ -145,7 +132,8 @@ export default {
   width: 10px;
   background: #333;
   border-radius: 50%;
-  margin-right: 10px;
+  /* margin-right: 10px; */
+  margin: auto;
 }
 .todo-tags {
   flex: 1 10%;
@@ -167,5 +155,14 @@ export default {
   background: rgba(17, 205, 239, 0.5);
   color: #fff;
   transform: scale(1.2);
+}
+.High {
+  background: red;
+}
+.Medium {
+  background: green;
+}
+.Low {
+  background: greenyellow;
 }
 </style>

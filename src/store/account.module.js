@@ -3,7 +3,7 @@ import router from "../router";
 const axios = require("axios");
 
 const _axios = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: "http://192.168.0.103:8080/api",
   timeout: 50000,
   headers: { "Content-Type": "application/json" }
 });

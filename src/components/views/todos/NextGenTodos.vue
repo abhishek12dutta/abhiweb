@@ -3,7 +3,7 @@
     <div class="box-footer clearfix no-border">
       <button
         type="button"
-        class="btn btn-default pull-right"
+        class="btn btn-success pull-right"
         @click="openNewTodoModal"
       >
         <i class="fa fa-plus"></i> Add item
@@ -42,7 +42,7 @@
           :list="todosList"
           v-bind="dragOptions"
           tag="ul"
-          @add="onAdd($event, true)"
+          @add="onAdd($event, false)"
         >
           <transition-group type="transition" :name="'flip-list'">
             <!-- v-for="(todo, index) in incompletedTodos"
@@ -70,7 +70,7 @@
           :list="todosList"
           v-bind="dragOptions"
           tag="ul"
-          @add="onAdd($event, false)"
+          @add="onAdd($event, true)"
         >
           <transition-group name="no" class="list-group" tag="ul">
             <user-card
@@ -87,6 +87,7 @@
     </div>
     <CreateTODOModal></CreateTODOModal>
     <EditTodoModal></EditTodoModal>
+    <ConfirmModal></ConfirmModal>
   </div>
 </template>
 
@@ -96,7 +97,7 @@ import UserCard from "../../template/UserCard";
 import { mapState, mapActions, mapGetters } from "vuex";
 import CreateTODOModal from "../../template/modal/CreateTODOModal";
 import EditTodoModal from "../../template/modal/EditTodoModal";
-
+import ConfirmModal from "../../template/modal/ConfirmModal";
 
 export default {
   name: "App",
@@ -104,7 +105,8 @@ export default {
     draggable,
     UserCard,
     CreateTODOModal,
-    EditTodoModal
+    EditTodoModal,
+    ConfirmModal
   },
   props: {
     todosList: []
@@ -136,17 +138,9 @@ export default {
       "action_feth_my_todos"
     ]),
     ...mapState("todo", ["todos"]),
-    onAdd(event, isCompleted) {
+    onAdd(event) {
       let id = event.item.getAttribute("data-id");
-      let todo = event.item.getAttribute("todo");
-      // axios.patch('/admin/testimonialsVisibility/' + id, {
-      //     visible: visible
-      // }).then((response) => {
-      //     // success message
-      // })
-      console.log("todo is: " + JSON.stringify(todo, null, 2));
-      console.log("id is: " + id);
-      console.log("Completed is: " + isCompleted);
+      this.action_toggle_completed_todo(id);
     },
     openNewTodoModal() {
       //  this.$modal.show('createNewTodoModal',{ id: 1 });
@@ -154,11 +148,10 @@ export default {
     },
     onEdit(todo) {
       const id = todo.id;
-      console.log('Curently edit todo, Id is : ' + id);
       this.$modal.show("editTodoModal", { id: id });
     },
     onDelete(todo) {
-      alert(`Deleting ${todo.id}`);
+      this.$modal.show("confirmModal",{ id: todo.id });
     },
     fetch_my_todos: function() {
       this.action_feth_my_todos();
