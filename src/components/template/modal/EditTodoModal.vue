@@ -132,8 +132,8 @@ export default {
       }
     },
      submitEdit() {
-      api.editTodo(this.todo).then(newTodo => {
-        this.action_edit_todo(newTodo);
+      api.editTodo(this.todo).then(() => {
+        this.action_edit_todo(this.todo);
         this.$modal.hide("editTodoModal");
       }).catch(function(error) {
           alert('error'+error);

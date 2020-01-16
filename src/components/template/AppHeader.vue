@@ -23,9 +23,9 @@
           <!-- <router-link class="nav-link" to="/">Home<span class="sr-only">(current)</span> </router-link> -->
 
         </li>
-        <li class="nav-item">
+        <!-- <li class="nav-item">
           <router-link class="nav-link" to="/myTodos">MyTodos</router-link>
-        </li>
+        </li> -->
           <li class="nav-item">
           <router-link class="nav-link" to="/nextGenTodos">NextGenTodos</router-link>
         </li>

@@ -45,8 +45,8 @@ let router = new Router({
         name: 'nextGenTodos',
         component: NextGenTodos,
         meta: { 
-         // requiresAuth: true
-          guest: true
+          requiresAuth: true
+         // guest: true
         }
       },
   ]

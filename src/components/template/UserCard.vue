@@ -1,6 +1,8 @@
 <template>
   <li
-    class="p-1 mb-1 flex flex-wrap justify-between items-center bg-white shadow rounded-lg cursor-move border border-white"
+    class="p-1 mb-1 flex flex-wrap justify-between items-center shadow rounded-lg
+     cursor-move border border-white"
+     :class="todo.completed ? 'bg-green-200' : 'bg-white'"
   >
     <div class="flex1 w-3/5">
       <!-- <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{user.name}}</p> -->

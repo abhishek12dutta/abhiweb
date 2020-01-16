@@ -150,8 +150,8 @@ export default {
       }
     },
     submitNewTodo() {
-      api.createNewTODO(this.todo).then(newTodo => {
-        this.action_add_todo(newTodo);
+      api.createNewTODO(this.todo).then(()=> {
+        this.action_add_todo(this.todo);
       }).catch(function(error) {
           alert('error'+error);
       });

@@ -1,7 +1,7 @@
 const axios = require("axios");
 
 const _axios = axios.create({
-  baseURL: "http://192.168.0.103:8080/api",
+  baseURL: "http://localhost:8080/api",
   timeout: 50000,
   headers: { "Content-Type": "application/json" }
 });
@@ -161,7 +161,7 @@ const mutations = {
 
     MU_DELETE_TODO(state, id) {
         console.log('deleteing id is: ' + id);
-        let index = state.todos.findIndex(todo => todo.id === id);
+        let index = state.todos.findIndex(todo => todo.id == id);
         if(index >=0){
             console.log('deleteing todo is: ' + state.todos[index].id);
             state.todos.splice(index, 1);
@@ -169,15 +169,17 @@ const mutations = {
     },
     MU_TOGGLE_COMPLETED_STATUS(state, id) {
         console.log('toggle id is: ' + id);
-        let index = state.todos.findIndex(todo => todo.id === id);
+        console.log("TODOS" + JSON.stringify(state.todos));
+        let index = state.todos.findIndex(todo => todo.id == id);
         console.log('index  is: ' + index);
         if(index >=0){
             state.todos[index].completed=!state.todos[index].completed;
         }
     },
     MU_EDIT_TODO(state, newtodo) {
-
-        let index = state.todos.findIndex(todo => todo.id === newtodo.id);
+        console.log("After edit todo object is " + JSON.stringify(newtodo));
+        let index = state.todos.findIndex(todo => todo.id == newtodo.id);
+        console.log('index  is: ' + index);
         if(index >=0){
             state.todos.splice(index,1,newtodo);
         }
