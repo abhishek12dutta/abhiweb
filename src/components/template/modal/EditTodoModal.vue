@@ -15,7 +15,7 @@
         </button>
       </div>
       <h2 class="mb-1 uppercase tracking-wide text-xl text-center">
-        Add New Todo
+        Edit Todo
       </h2>
       <form @submit.prevent="submitEdit">
         <div class="form-group mb-1 mt-2">
@@ -133,15 +133,11 @@ export default {
     },
      submitEdit() {
       api.editTodo(this.todo).then(newTodo => {
-        this.$modal.hide("editTodoModal");
         this.action_edit_todo(newTodo);
+        this.$modal.hide("editTodoModal");
       }).catch(function(error) {
           alert('error'+error);
       });
-
-      
-     
-    //  this.action_add_todo(this.todo);
     }
   }
 };

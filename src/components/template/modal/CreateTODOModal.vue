@@ -151,11 +151,11 @@ export default {
     },
     submitNewTodo() {
       api.createNewTODO(this.todo).then(newTodo => {
-        this.$modal.hide("createNewTodoModal");
         this.action_add_todo(newTodo);
       }).catch(function(error) {
           alert('error'+error);
       });
+      this.$modal.hide("createNewTodoModal");
     }
   }
 };
@@ -174,12 +174,6 @@ export default {
 }
 
 /* custom styles */
-body {
-  padding: 4em;
-  background: #e5e5e5;
-  font: 13px/1.4 Geneva, "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode",
-    Verdana, sans-serif;
-}
 
 input[type="date"] {
   border: 1px solid #dee2e6 !important;
