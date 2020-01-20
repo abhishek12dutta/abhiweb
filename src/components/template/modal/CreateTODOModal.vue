@@ -128,19 +128,16 @@ export default {
   methods: {
     ...mapActions("todo", ["action_add_todo"]),
     beforeOpen() {
-      // let todoid = event.params.id;
-      // if (todoid != null) {
-      //   let t = {
-      //     id: 1,
-      //     title: "Todo Item 1, compled todo functionality",
-      //     priority: "High",
-      //     desc: "This is First ToDO item",
-      //     completed: true,
-      //     date: new Date().toISOString().substr(0, 10),
-      //     tags: ["Personal"]
-      //   };
-      //   this.todo = t;
-      // }
+            let emptyTodo = {
+            id: 1,
+            title: "",
+            priority: "",
+            desc: "",
+            completed: false,
+            date: "",
+            tags: []
+        };
+        this.todo = emptyTodo;
     },
     beforeClose(event) {
       console.log(event);

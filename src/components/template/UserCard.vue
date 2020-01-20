@@ -4,13 +4,13 @@
      cursor-move border border-white"
      :class="todo.completed ? 'bg-green-200' : 'bg-white'"
   >
-    <div class="flex1 w-3/5">
+    <div class="flex1 md:w-4/5 w-3/5">
       <!-- <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{user.name}}</p> -->
       <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">
         {{todo.title}}
       </p>
     </div>
-    <div class="flex1 w-2/5">
+    <div class="flex1 md:w-1/5 w-2/5">
       <button
         aria-label="Edit user"
         class="action-button p-1 focus:outline-none focus:shadow-outline text-teal-500 hover:text-teal-600"
@@ -26,8 +26,8 @@
         <Trash2Icon />
       </button>
     </div>
-    <div class="flex items-center">
-      <div class="flex-1 text-center px-4 m-2">
+    <div class="flex items-center w-100">
+      <div class="flex-1 w-1/3 text-center px-4 m-2">
         <div class="todo-tags">
           <i
             class="fa fa-tag"
@@ -50,10 +50,10 @@
           </div>
         </div>
       </div>
-      <div class="flex-2 text-center px-2">
+      <div class="flex-2 w-1/3 text-center px-2">
          <span class="todo-date">{{ todo.date }}</span>
       </div>
-      <div class="flex-1 text-center px-4 m-2">
+      <div class="flex-1 w-1/3 text-center px-4 m-2">
         <div class="todo-priority">
           <div class="priority-dot" :class="todo.priority"></div>
           <span>{{ todo.priority }}</span>
