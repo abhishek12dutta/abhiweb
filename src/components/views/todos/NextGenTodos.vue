@@ -13,12 +13,17 @@
       <div class="col-4">
         <span class="badge badge-primary"
           >Total :
-          {{ incompletedTodos.length + completedTodos.length || 0 }}</span
+          {{
+            incompletedTodos.length +
+              completedTodos.length +
+              inprogessTodos.length || 0
+          }}</span
         >
       </div>
       <div class="col-4">
         <span class="badge badge-warning"
-          >Pending : {{ incompletedTodos.length || 0 }}</span
+          >Pending :
+          {{ incompletedTodos.length + inprogessTodos.length || 0 }}</span
         >
       </div>
       <div class="col-4">
@@ -42,7 +47,7 @@
           :list="todosList"
           v-bind="dragOptions"
           tag="ul"
-          @add="onAdd($event, false)"
+          @add="onAdd($event, 'O')"
         >
           <transition-group type="transition" :name="'flip-list'">
             <!-- v-for="(todo, index) in incompletedTodos"
@@ -60,7 +65,32 @@
         </draggable>
       </div>
       <div
-        class="text-gray-700 text-center bg-gray-400 md:px-4 py-2 m-2 flex-1"
+        class="text-gray-700 text-center bg-yellow-200 md:px-4 py-2 m-2 flex-1"
+      >
+        <div class="box box-yellow">
+          <h3 class="box-title">InProgress Todos</h3>
+        </div>
+        <draggable
+          class="w-full list-group min-height-20"
+          :list="todosList"
+          v-bind="dragOptions"
+          tag="ul"
+          @add="onAdd($event, 'I')"
+        >
+          <transition-group name="no" class="list-group" tag="ul">
+            <user-card
+              v-for="todo in inprogessTodos"
+              :key="todo.id"
+              :todo="todo"
+              :data-id="todo.id"
+              @on-edit="onEdit"
+              @on-delete="onDelete"
+            ></user-card>
+          </transition-group>
+        </draggable>
+      </div>
+      <div
+        class="text-gray-700 text-center bg-green-300 md:px-4 py-2 m-2 flex-1"
       >
         <div class="box box-green">
           <h3 class="box-title">Completed Todos</h3>
@@ -70,7 +100,7 @@
           :list="todosList"
           v-bind="dragOptions"
           tag="ul"
-          @add="onAdd($event, true)"
+          @add="onAdd($event, 'C')"
         >
           <transition-group name="no" class="list-group" tag="ul">
             <user-card
@@ -121,7 +151,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters("todo", ["completedTodos", "incompletedTodos"]),
+    ...mapGetters("todo", [
+      "completedTodos",
+      "incompletedTodos",
+      "inprogessTodos"
+    ]),
     dragOptions() {
       return {
         animation: 200,
@@ -138,9 +172,13 @@ export default {
       "action_feth_my_todos"
     ]),
     ...mapState("todo", ["todos"]),
-    onAdd(event) {
+    onAdd(event, completionstatus) {
       let id = event.item.getAttribute("data-id");
-      this.action_toggle_completed_todo(id);
+      let payload = {
+        id: id,
+        completionstatus: completionstatus
+      };
+      this.action_toggle_completed_todo(payload);
     },
     openNewTodoModal() {
       //  this.$modal.show('createNewTodoModal',{ id: 1 });
@@ -151,7 +189,7 @@ export default {
       this.$modal.show("editTodoModal", { id: id });
     },
     onDelete(todo) {
-      this.$modal.show("confirmModal",{ id: todo.id });
+      this.$modal.show("confirmModal", { id: todo.id });
     },
     fetch_my_todos: function() {
       this.action_feth_my_todos();
@@ -172,6 +210,9 @@ but you'd use "@apply border opacity-50 border-blue-500 bg-gray-200" here */
 }
 .box.box-green {
   border: 3px solid #00a65a !important;
+}
+.box.box-yellow {
+  border: 3px solid #d7f81c !important;
 }
 
 .box {

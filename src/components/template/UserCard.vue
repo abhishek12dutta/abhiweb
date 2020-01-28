@@ -1,16 +1,18 @@
 <template>
+<!-- :class="todo.completed ? 'bg-green-200' : 'bg-white'" -->
   <li
     class="p-1 mb-1 flex flex-wrap justify-between items-center shadow rounded-lg
      cursor-move border border-white"
-     :class="todo.completed ? 'bg-green-200' : 'bg-white'"
+     :class="todo.completionStatus=='C' ? 'bg-green-200' : 'bg-white'"
+     
   >
     <div class="flex1 md:w-4/5 w-3/5">
       <!-- <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">{{user.name}}</p> -->
-      <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide">
+      <p class="ml-2 text-gray-700 font-semibold font-sans tracking-wide text-justify">
         {{todo.title}}
       </p>
     </div>
-    <div class="flex1 md:w-1/5 w-2/5">
+    <div class="flex1 md:w-1/5 w-2/5" v-if="todo.completionStatus!='C'">
       <button
         aria-label="Edit user"
         class="action-button p-1 focus:outline-none focus:shadow-outline text-teal-500 hover:text-teal-600"
@@ -51,9 +53,11 @@
         </div>
       </div>
       <div class="flex-2 w-1/3 text-center px-2">
-         <span class="todo-date">{{ todo.date }}</span>
+         <span class="todo-date">
+           {{moment(todo.date).format('DD-MMM-YYYY')}}
+         </span>
       </div>
-      <div class="flex-1 w-1/3 text-center px-4 m-2">
+      <div class="flex-1 w-1/3 text-center px-2 m-2">
         <div class="todo-priority">
           <div class="priority-dot" :class="todo.priority"></div>
           <span>{{ todo.priority }}</span>
@@ -61,51 +65,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="flex justify-between">
-      <div class="flex1">
-        <div class="todo-tags">
-          <i
-            class="fa fa-tag"
-            aria-hidden="true"
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          ></i>
-          <div class="dropdown-menu">
-           <div class="dropdown-header">
-            <i class="fa fa-tag" aria-hidden="true"></i> Tags
-          </div>
-          <span
-            class="badge badge-pill badge-info"
-            style="{ background: tag.red, color: '#fff' }">
-            ABC
-          </span>
-           <span
-            class="badge badge-pill badge-info"
-            style="{ background: tag.green, color: '#fff' }">
-            ABC
-          </span>
-           <span
-            class="badge badge-pill badge-info"
-            style="{ background: tag.red, color: '#fff' }">
-            ABC
-          </span>
-          </div>
-        </div>
-      </div>
-      <div
-        class="flex1"
-      >
-        <div class="todo-priority">
-          <div class="priority-dot"></div>
-          <span>High</span>
-        </div>
-      </div>
-      <div
-        class="flex1">
-        3
-      </div>
-    </div> -->
   </li>
 </template>
 <script>

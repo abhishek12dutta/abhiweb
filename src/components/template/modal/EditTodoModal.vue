@@ -131,8 +131,8 @@ export default {
         event.stop();
       }
     },
-     submitEdit() {
-      api.editTodo(this.todo).then(() => {
+     async submitEdit() {
+      await api.editTodo(this.todo).then(() => {
         this.action_edit_todo(this.todo);
         this.$modal.hide("editTodoModal");
       }).catch(function(error) {

@@ -9,6 +9,10 @@ import store from './store/store';
 import VeeValidate from 'vee-validate';
 import './assets/css/tailwind.css';
 import VModal from 'vue-js-modal';
+import moment from 'moment'
+
+Vue.prototype.moment = moment;
+
 Vue.use(VeeValidate);
 Vue.use(VueTelInput);
 //Vue.use(VModal, { dynamic: true, dynamicDefaults: { clickToClose: false } });

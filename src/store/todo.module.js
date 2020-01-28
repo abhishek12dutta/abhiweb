@@ -111,7 +111,7 @@ const actions = {
         });
         
     },
-    action_toggle_completed_todo({dispatch,commit }, id) {
+    action_toggle_completed_todo({dispatch,commit }, payload) {
         const token = localStorage.getItem('token');
         const options = {
             headers: {
@@ -120,9 +120,9 @@ const actions = {
           };
 
         _axios
-        .put(`/todo/mytodo/togglestatus/${id}`,null,options)
+        .put(`/todo/mytodo/togglestatus?todoId=${payload.id}&completionStatus=${payload.completionstatus}`,null,options)
         .then(function() {
-            commit('MU_TOGGLE_COMPLETED_STATUS', id);
+            commit('MU_TOGGLE_COMPLETED_STATUS', payload);
         })
         .catch(function(error) {
             dispatch("alert/error", error, { root: true });
@@ -167,13 +167,14 @@ const mutations = {
             state.todos.splice(index, 1);
         }
     },
-    MU_TOGGLE_COMPLETED_STATUS(state, id) {
-        console.log('toggle id is: ' + id);
+    MU_TOGGLE_COMPLETED_STATUS(state, payload) {
+        console.log('toggle id is: ' + payload.id);
+        console.log('completionstats id is: ' + payload.completionstatus);
         console.log("TODOS" + JSON.stringify(state.todos));
-        let index = state.todos.findIndex(todo => todo.id == id);
+        let index = state.todos.findIndex(todo => todo.id == payload.id);
         console.log('index  is: ' + index);
         if(index >=0){
-            state.todos[index].completed=!state.todos[index].completed;
+            state.todos[index].completionStatus=payload.completionstatus;
         }
     },
     MU_EDIT_TODO(state, newtodo) {
@@ -207,12 +208,15 @@ const mutations = {
 
 const getters = {
     completedTodos: state => {
-        return state.todos.filter(todo => todo.completed)
+        return state.todos.filter(todo => todo.completionStatus=='C')
     },
     incompletedTodos: state => {
-        return state.todos.filter(todo => !todo.completed)
+        return state.todos.filter(todo => todo.completionStatus == 'O')
+    },
+    inprogessTodos: state => {
+        return state.todos.filter(todo => todo.completionStatus == 'I')
     }
-
+    
 
 };
 

@@ -119,7 +119,7 @@ export default {
         title: "",
         priority: "",
         desc: "",
-        completed: false,
+        completionStatus: "",
         date: "",
         tags: []
       }
@@ -133,7 +133,7 @@ export default {
             title: "",
             priority: "",
             desc: "",
-            completed: false,
+            completionStatus: "",
             date: "",
             tags: []
         };
@@ -147,8 +147,8 @@ export default {
       }
     },
     submitNewTodo() {
-      api.createNewTODO(this.todo).then(()=> {
-        this.action_add_todo(this.todo);
+      api.createNewTODO(this.todo).then((newTodo)=> {
+        this.action_add_todo(newTodo);
       }).catch(function(error) {
           alert('error'+error);
       });
