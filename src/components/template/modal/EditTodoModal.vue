@@ -118,11 +118,13 @@ export default {
   methods: {
       ...mapActions("todo", ["action_edit_todo"]),
     beforeOpen(event) {
-       let id=event.params.id;
-       console.log('Curently in edit modal with todo Id : ' + id);
-        api.fetchTodoById(id).then(todo => {
-          this.todo=todo;
-      });
+      this.todo=event.params.todo;
+      //  let id=event.params.id;
+      //  console.log('Curently in edit modal with todo Id : ' + id);
+      //   api.fetchTodoById(id).then(todo => {
+      //     this.todo=todo;
+      // });
+      // console.log('Done');
     },
     beforeClose(event) {
       console.log(event);

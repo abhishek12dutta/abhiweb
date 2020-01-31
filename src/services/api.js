@@ -57,3 +57,20 @@ export const editTodo = todo => {
       throw error;
     });
 };
+
+
+export const purgeUnpurgeTodo = purgeRequest => {
+  const URL = '/todo/mytodo/archive';
+  const token = localStorage.getItem('token');
+  const options = {
+      headers: {
+        Authorization: 'Bearer '+token
+      }
+    };
+    return  _axios
+    .post(URL,purgeRequest,options)
+    .then(response => response.data)
+    .catch(function(error) {
+      throw error;
+    });
+};

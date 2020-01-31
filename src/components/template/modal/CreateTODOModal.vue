@@ -146,8 +146,9 @@ export default {
         event.stop();
       }
     },
-    submitNewTodo() {
-      api.createNewTODO(this.todo).then((newTodo)=> {
+    async submitNewTodo() {
+      this.todo.completionStatus='O';
+      await api.createNewTODO(this.todo).then((newTodo)=> {
         this.action_add_todo(newTodo);
       }).catch(function(error) {
           alert('error'+error);

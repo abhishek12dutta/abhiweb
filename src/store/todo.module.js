@@ -150,7 +150,29 @@ const actions = {
         
     },
     action_feth_my_todos({ commit }) {
-        commit('MU_FETCH_MY_TODOS');
+
+        const token = localStorage.getItem('token');
+        const options = {
+            headers: {
+              Authorization: 'Bearer '+token
+            }
+          };
+
+        _axios
+        .get("/todo/mytodos", options)
+        .then(function(response) {
+            commit('MU_FETCH_MY_TODOS',response.data);
+           // state.todos=response.data;
+        })
+        .catch(function(error) {
+          console.log(error.response);
+        });
+
+        
+    },
+
+    action_purge_todo({ commit }, purgedtodo) {
+        commit('MU_PURGE_TODO', purgedtodo);
     }
 };
 
@@ -185,22 +207,41 @@ const mutations = {
             state.todos.splice(index,1,newtodo);
         }
     },
-    MU_FETCH_MY_TODOS(state){
-        const token = localStorage.getItem('token');
-        const options = {
-            headers: {
-              Authorization: 'Bearer '+token
-            }
-          };
+    MU_FETCH_MY_TODOS(state,todolist){
+        // const token = localStorage.getItem('token');
+        // const options = {
+        //     headers: {
+        //       Authorization: 'Bearer '+token
+        //     }
+        //   };
 
-        _axios
-        .get("/todo/mytodos", options)
-        .then(function(response) {
-            state.todos=response.data;
-        })
-        .catch(function(error) {
-          console.log(error.response);
-        });
+        // _axios
+        // .get("/todo/mytodos", options)
+        // .then(function(response) {
+        //     state.todos=response.data;
+        // })
+        // .catch(function(error) {
+        //   console.log(error.response);
+        // });
+        state.todos = todolist.filter(todo => !todo.purged);
+        
+    },
+
+    MU_PURGE_TODO(state, purgedTodo) {
+
+        console.log(purgedTodo);
+
+
+        console.log(purgedTodo.purged);
+
+        if(purgedTodo.purged){
+            let index = state.todos.findIndex(todo => todo.id == purgedTodo.id);
+            if(index >=0){
+                state.todos.splice(index,1);
+            }
+        }else{
+            state.todos = [...state.todos,todo];
+        }
         
     }
 

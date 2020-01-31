@@ -10,7 +10,9 @@
   >
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Are you sure?</h4>
+        <h4 class="modal-title">
+          Want to {{ confirmDelete ? "Delete" : "Purge" }} ?
+        </h4>
         <button
           type="button"
           class="close"
@@ -31,9 +33,9 @@
           type="button"
           id="delete_me"
           class="btn btn-sm btn-danger"
-          @click.prevent="onDelete"
+          @click.prevent="onConfirm"
         >
-          Delete
+          Confirm
         </button>
       </div>
     </div>
@@ -41,6 +43,7 @@
 </template>
 <script>
 import { mapActions } from "vuex";
+import * as api from "../../../services/api";
 export default {
   name: "ConfirmModal",
   components: {
@@ -48,20 +51,49 @@ export default {
   },
   data() {
     return {
-      id: 0
+      id: 0,
+      confirmDelete: false,
+      confirmPurge: false
     };
   },
   methods: {
-    ...mapActions("todo", ["action_delete_todo"]),
+    ...mapActions("todo", ["action_delete_todo","action_purge_todo"]),
     beforeOpen(event) {
       let todoId = event.params.id;
+      console.log("Action--", event.params.action);
+      if (event.params.action === "PURGE") {
+        this.confirmPurge = true;
+        console.log("PURGE");
+      } else if (event.params.action === "DELETE") {
+        this.confirmDelete = true;
+        console.log("DELETE");
+      }
       this.id = todoId;
     },
     beforeClose() {
       this.id = 0;
+      this.confirmDelete = false;
+      this.confirmPurge = false;
     },
-    onDelete() {
-      this.action_delete_todo(this.id);
+    onConfirm() {
+      if (this.confirmDelete) {
+        this.action_delete_todo(this.id);
+      } else if (this.confirmPurge) {
+        let purgeRequest = {
+          id: this.id,
+          action: 'P',
+        };
+        api
+          .purgeUnpurgeTodo(purgeRequest)
+          .then((purgedTodo) => {
+            console.log("PURGED Success");
+            this.action_purge_todo(purgedTodo);
+          })
+          .catch(function(error) {
+            alert("error" + error);
+          });
+
+      }
       this.$modal.hide("confirmModal");
     }
   }

@@ -5,6 +5,8 @@ import Login from './components/views/Login';
 import SignUp from './components/views/SignUp';
 import MyTodos from './components/views/todos/MyTodos';
 import NextGenTodos from './components/views/todos/NextGenTodos';
+import ViewPurgedTodos from './components/views/todos/ViewPurgedTodos';
+
 Vue.use(Router);
 
 let router = new Router({
@@ -49,6 +51,15 @@ let router = new Router({
          // guest: true
         }
       },
+      {
+        path: '/viewPurgedTodos',
+        name: 'viewPurgedTodos',
+        component: ViewPurgedTodos,
+        meta: { 
+          requiresAuth: true
+         // guest: true
+        }
+      }
   ]
 })
 

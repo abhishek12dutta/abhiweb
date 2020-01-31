@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light" v-bind:class=" { 'navbarOpen': show }" style="background-color: rgba(2, 162, 210);">
-    <router-link class="navbar-brand" to="/">Money Manager</router-link>
+    <router-link class="navbar-brand" to="/"><img src="../../assets/site-logo.png" alt=""></router-link>
     <button
       class="navbar-toggler"
       type="button"
@@ -27,10 +27,10 @@
           <router-link class="nav-link" to="/myTodos">MyTodos</router-link>
         </li> -->
           <li class="nav-item">
-          <router-link class="nav-link" to="/nextGenTodos">NextGenTodos</router-link>
+          <router-link class="nav-link" to="/nextGenTodos">MyTodos</router-link>
         </li>
           <li class="nav-item">
-          <a class="nav-link" href="#">Link3</a>
+          <router-link class="nav-link" to="/viewPurgedTodos">PurgedTodos</router-link>
         </li>
       </ul>
       <ul class="navbar-nav navbar-right">
